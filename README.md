@@ -1,2 +1,3 @@
-# NFT-marketplace-backend
-node backend
+# Marketplace Backend
+# Author: Chenjiejie
+# Ethers + Node
