@@ -35,6 +35,5 @@ mongoose.connect(mongourl, {useUnifiedTopology: true,useNewUrlParser: true,}).th
 	console.log("MongoDB Connected")
 	const port = require("./config/config").port;
 	app.listen(port, () => console.log(`Marketplace Server running on port ${port}`));
-	// event_subscriber.handleEvent()
 }).catch((err) => console.log(err));
 
