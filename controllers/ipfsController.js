@@ -10,9 +10,9 @@ const urlFile = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
 const urlJSON = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
 
 
-const insertNFTImage = async (filepath, name, keyvalues) => {
+const insertNFTImage = async (filename, name, keyvalues) => {
     try {
-        const file = fs.readFileSync(filepath)
+        const filepath = path.resolve(__dirname, "../upload/temp/" + filename)
         const res = await pinFileToIPFS(filepath, name, keyvalues)
         if (res.status == 200) {
             var imgHash = res.data.IpfsHash;

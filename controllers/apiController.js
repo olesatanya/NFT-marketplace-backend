@@ -10,16 +10,17 @@ const { MetadataModal } = require('../models/Metadatas')
 const { StatsModal } = require('../models/Stats')
 const { LogModal } = require('../models/Historys')
 
+const {ipfsController} = require('./ipfsController');
+
 const getCollections = async (category) => {
 	try {
-		var rows = await CollectionModal.find(category===0?{}:{category: category}).sort({registation: 1})
+		var rows = await CollectionModal.find(category===0 ? {} : {category}).sort({registation: 1})
 		return { error: 0, result: rows }
 	} catch (ex) {
 		console.log(ex) 
 		return { error: 1, msg: "error" }
 	}
 }
-
 
 const getMyCollections = async (account) => {
 	try {
@@ -143,6 +144,7 @@ const addItem = async (owner, ownername, imgid, name, website, description, tota
 		}
 		const instance = new NFTModal(collection);
 		var res = await instance.save()
+		await ipfsController(imgid, name, {})
 		return { error: 0, msg: 'success', result: res }
 	} catch (ex) {
 		console.log(ex) 
@@ -344,7 +346,7 @@ const login = async (address) => {
 		return { error: 1, msg: "error" }
 	}
 }
-const getStats = async(date, category) => {
+const getStats = async (date, category) => {
 	try {
 		var filter = {};
 		if(category !== 0) filter['category'] = category;
@@ -355,6 +357,49 @@ const getStats = async(date, category) => {
 		console.log(ex) 
 		return { error: 1, msg: "error" }
 	}
+}
+
+const makeBuyOffer = async (count, nftid, price, expire) => {
+	try {
+		await OfferModal
+		return { error: 0, result: rows}
+	} catch (ex) {
+		console.log(ex) 
+		return { error: 1, msg: "error" }
+	}
+}
+
+const makeSellOffer = async (account, username, nftid, price, selltype) => {
+	const instance = new OfferModal(
+		{
+			userid: account,
+  			registation: new Date().getTime(),
+  			username: username,
+  			nftid: nftid,
+  			type: selltype,
+			expire: { type: Number, default: 1 },
+			price: { type: Number, default: 0},
+			state: { type: Number, default: 0}
+		}
+	);
+		var res = await instance.save()
+	
+}
+
+const setAuctionWinner = async (account, price, nftid) => {
+
+}
+
+const placeBid = async (account, price, nftid) => {
+
+}
+
+const sell = async (account, nftid, price, to) => {
+
+}
+
+const buy = async (account, nftid, price, from) => {
+
 }
 
 module.exports = {
@@ -377,5 +422,11 @@ module.exports = {
 	updateOffer,
 	getMyTransactions,
 	login,
-	getStats
+	getStats,
+	buy,
+	sell,
+	makeBuyOffer,
+	makeSellOffer,
+	placeBid,
+	setAuctionWinner
 }
