@@ -1,5 +1,10 @@
 const router = require('express').Router();
 const multer = require('multer');
+const cloudinary = require("cloudinary").v2;
+
+const config = require("../config/config.js");
+cloudinary.config(config.cloudinary);
+
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
