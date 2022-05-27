@@ -1,3 +1,1 @@
-# Marketplace Backend
-# Author: Chenjiejie
-# Ethers + Node
+# NFT Lottery Backend

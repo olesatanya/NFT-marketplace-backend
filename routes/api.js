@@ -1,10 +1,6 @@
 const router = require('express').Router();
 const multer = require('multer');
-const cloudinary = require("cloudinary").v2;
-
-const config = require("../config/config.js");
-cloudinary.config(config.cloudinary);
-
+const apiController = require('../controllers/apiController.js')
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -15,195 +11,12 @@ const storage = multer.diskStorage({
 		cb(null, filename)
 	},
 })
-
 const upload = multer({ storage: storage })
 
-const apiController = require('../controllers/apiController.js')
-
-router.post('/get-collections', async (req, res) => {
+router.post('/get-lotteries', async (req, res) => {
 	try {
-		const collection = req.body.collection;
-		const response = await apiController.getCollections(collection)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/get-my-collections', async (req, res) => {
-	try {
-		const account = req.body.account;
-		const response = await apiController.getMyCollections(account)
-		res.send(response)
-	} catch ( error ) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/create-collection', async (req, res) => {
-	try {
-		const {account, ownername, logoImg, bannerImg, featureImg, name, url, description, category, website, discord, instagram, medium, coins, theme} = req.body;
-		const response = await apiController.createCollection(account, ownername, logoImg, bannerImg, featureImg, name, url, description, category, website, discord, instagram, medium, coins, theme)
-		res.send(response)
-	} catch ( error ) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/update-collection', async (req, res) => {
-	try {
-		const {collectionid, account, logoImg, bannerImg, featureImg, name, url, description, category, website, discord, instagram, medium, coins, theme} = req.body;
-		const response = await apiController.updateCollection(collectionid, account, logoImg, bannerImg, featureImg, name, url, description, category, website, discord, instagram, medium, telegram, coins, theme)
-		res.send(response)
-	}catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/get-items', async (req, res) => {
-	try{
-		const {keyword, category, onauction, hasoffers, buynow, sort, min_usd, max_usd} = req.body;
-		const response = await apiController.getItems(keyword, category, onauction, hasoffers,  buynow, sort, min_usd, max_usd)
-		res.send(response)
-	}catch( error ){
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/add-item', async (req, res) => {
-	try{
-		const { owner, ownername, imgid, name, website, description, totalSupply, properties, levels, stats, saletype, saleend, price, usd} = req.body;
-		const response = await apiController.addItem(owner, ownername, imgid, name, website, description, totalSupply, properties, levels, stats, saletype, saleend, price, usd)
-		res.send(response)
-	}catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/set-item-info', async (req, res) => {
-	try{
-		const {id, name, website, description, properties, levels, stats, saletype, saleend, price, usd} = req.body;
-		const response = await apiController.updateItem(id,  name, website, description,  properties, levels, stats, saletype, saleend, price, usd)
-		res.send(response)
-	}
-	catch(error){
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/set-watchlist', async (req, res) => {
-	try{
-		const {account, collectionid} = req.body;
-		const response = await apiController.setWatchlist(account, collectionid)
-		res.send(response)
-	}catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/set-favourite', async (req, res) => {
-	try{
-		const {account, nftid} = req.body;
-		const response = await apiController.setFavourite(account, nftid);
-		res.send(response)
-	}catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/view-item', async (req, res) => {
-	try{
-		const {id} = req.body;
-		const response = await apiController.viewItem(id)
-		res.send(response)
-	}catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/get-my-watchlist', async (req, res) => {
-	try{
-		const {account} = req.body;
-		const response = await apiController.getMyWatchlist(account)
-		res.send(response)
-	} catch (error){
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-router.post('/get-my-favourites', async (req, res) => {
-	try {
-		const {account} = req.body;
-		const response = await apiController.getMyFavourite(account)
-		res.send(response)	
-	} catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/set-dark-mode', async (req, res) => {
-	try{
-		const {account, type} = req.body;
-		const response = await apiController.setDarkMode(account, type)
-		res.send(response)
-	} catch(error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/save-account', async (req, res) => {
-	try {
-		const { address, name, bio, email, instagram, website, twitter, avatar, banner, theme } = req.body
-		const response = await apiController.saveProfile(address, name, bio, email, instagram, website, twitter, avatar, banner, theme)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/get-my-offers', async (req, res) => {
-	try {
-		const {account} = req.body;
-		const response = await apiController.getMyOffers(account)
-		res.send(response)
-	} catch( error ){
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/update-offer', async (req, res) => {
-	try{
-		const {account, nftid, expire, price} = req.body;
-		const response = await apiController.updateOffer(account, nftid, expire, price)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/get-my-transactions', async (req, res) => {
-	try {
-		const {account} = req.body;
-		const response = await apiController.getMyTransactions(account)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/login', async (req, res) => {
-	try {
-		const {account} = req.body.address;
-		const response = await apiController.login(account)
+		const {type} = req.body;
+		const response = await apiController.getLotteries(type)
 		res.send(response)
 	} catch (error) {
 		console.log(error)
@@ -212,10 +25,10 @@ router.post('/login', async (req, res) => {
 })
 
 
-router.post('/get-stats', async (req, res) => {
+router.post('/create-lottery', async (req, res) => {
 	try {
-		const {category, date} = req.body;
-		const response = await apiController.getStats(date, category)
+		const {name, description, backImg, imgId, headerImgId,  creator, startTime,  endTime, totalSupply, nftImgs, rate } = req.body;
+		const response = await apiController.createLottery(name, description, backImg,  imgId, headerImgId,  creator, startTime, endTime, totalSupply, nftImgs, rate)
 		res.send(response)
 	} catch (error) {
 		console.log(error)
@@ -223,7 +36,48 @@ router.post('/get-stats', async (req, res) => {
 	}
 })
 
-router.post('/upload-image', upload.single('file'),	async (req, res) => {
+router.post('/get-nft-urls', async (req, res) => {
+	try {
+		const {lotteryId } = req.body;
+		const response = await apiController.getNFTUrls(lotteryId)
+		res.send(response)
+	} catch (error) {
+		console.log(error)
+		res.status(404).send({msg:'error'});
+	}
+})
+
+router.post('/change-lottery', async (req, res) => {
+	try {
+		const {id, name, description, backImg, imgId, headerImgId, startTime, endTime, rate} = req.body;
+		const response = await apiController.changeLottery(id, name, description, backImg, imgId, headerImgId, startTime, endTime, rate)
+		res.send(response)
+	} catch (error) {
+		console.log(error)
+		res.status(404).send({msg:'error'});
+	}
+})	
+router.post('/end-lottery', async (req, res) => {
+	try {
+		const {lotteryId} = req.body;
+		const response = await apiController.endLottery(lotteryId)
+		res.send(response)
+	} catch (error) {
+		console.log(error)
+		res.status(404).send({msg:'error'});
+	}
+})	
+router.post('/get-lottery-info', async (req, res) => {
+	try {
+		const {lotteryId} = req.body;
+		const response = await apiController.getLotteryInfo(lotteryId)
+		res.send(response)
+	} catch (error) {
+		console.log(error)
+		res.status(404).send({msg:'error'});
+	}
+})	
+router.post('/upload-image', upload.array('file'),	async (req, res) => {
 	try {
 		if(!req.file){
 			return res.send({id:'0.png'})
@@ -237,72 +91,6 @@ router.post('/upload-image', upload.single('file'),	async (req, res) => {
 	}
 })
 	
-router.post('/make-buy-offer', async (req, res) => {
-	try {
-		const { account, username, nftid, price, expire } = req.body
-		const response = await apiController.makeBuyOffer(account, username, nftid, price, expire)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send('');
-	}
-})
-
-router.post('/make-sell-offer', async (req, res) => {
-	try {
-		const { account, nftid, price } = req.body
-		const response = await apiController.makeSellOffer(account, nftid, price, selltype)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/set-auction-winner', async (req, res) => {
-	try {
-		const {account, price, nftid} = req.body;
-		const response = await apiController.setAuctionWinner(account, price, nftid)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/set-bid', async (req, res) => {
-	try {
-		const {account, price, nftid} = req.body;
-		const response = await apiController.placeBid(account, price, nftid)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/sell', async (req, res) => {
-	try {
-		const {account, nftid, price, to} = req.body;
-		const response = await apiController.sell(account, nftid, price, to)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
-router.post('/buy', async (req, res) => {
-	try {
-		const {account, nftid, price, from} = req.body;
-		const response = await apiController.buy(account, nftid, price, from)
-		res.send(response)
-	} catch (error) {
-		console.log(error)
-		res.status(404).send({msg:'error'});
-	}
-})
-
 router.all('/*', async (req, res) => {
 	try {
 		res.send({ error: 404, result: { msg: '404' } })	

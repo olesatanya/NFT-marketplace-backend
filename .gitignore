@@ -13,4 +13,5 @@ jspm_packages/
 .env
 .env.test
 .env.*
+upload/
 public/
