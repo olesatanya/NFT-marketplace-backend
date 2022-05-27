@@ -1,5 +1,5 @@
-# Lottery-contract
-# How to deply contract?
+# Lottery-backend
+# How to Run?
 ## Run  on cmd 
 ```
     yarn start
